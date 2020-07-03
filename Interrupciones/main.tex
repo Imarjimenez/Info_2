@@ -1,0 +1,161 @@
+
+ 
+\documentclass[a4paper,12pt]{article} 
+
+
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+
+\usepackage{multirow}
+\usepackage{booktabs} 
+
+
+\usepackage{graphicx} 
+
+
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+
+\usepackage{float}
+
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+
+
+
+\pagestyle{fancy} 
+
+\fancyhf{} 
+
+\lhead{\footnotesize  Interrupciones}% \lhead puts text in the top left corner. \footnotesize sets our font to a smaller size.
+
+%\rhead works just like \lhead (you can also use \chead)
+\rhead{\footnotesize Informática II} %<---- Fill in your lastnames.
+
+
+\cfoot{\footnotesize \thepage} 
+
+
+
+\begin{document}
+
+
+\thispagestyle{empty}  
+
+\begin{tabular}{p{15.5cm}}  
+{\large \bf Proyecto de investigacion - Interrupciones} \\ Imar Nayeli Jimenez Arango \\ 1007424872\\ Informática II   \\ 2019/2, Grupo 6\\
+\hline % \hline produces horizontal lines.
+\\
+\end{tabular} % Our tabular environment ends here.
+
+\vspace*{0.3cm} % Now we want to add some vertical space in between the line and our title.
+
+\begin{center} % Everything within the center environment is centered.
+	{\Large \bf Interrupciones} % <---- Don't forget to put in the right number
+	\vspace{2mm}
+	
+		
+\end{center}  
+
+\vspace{0.4cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Up until this point you only have to make minor changes for every week (Number of the homework). Your write up essentially starts here.
+
+En el ámbito de los microprocesadores. 
+
+\begin{enumerate}
+
+\item {\it ¿Qué es una interrupción en el contexto de los microprocesadores?}
+
+
+Una interrupción(también conocida como
+interrupción de hardware o petición de interrupción) es una señal recibida por el procesador  de un ordenador , indicando que debe "interrumpir" el curso de ejecución actual y pasar a ejecutar código específico para tratar esta situación.Una interrupción es una suspensión temporal de la ejecución de un programa, para pasar a
+ejecutar una subrutina de servicio de interrupción, la cual, por lo general, no forma parte del
+programa (generalmente perteneciente al sistema operativo, o al BIOS). Luego de finalizada dicha
+subrutina, se reanuda la ejecución del programa.
+Las interrupciones surgen de las necesidades que tienen los dispositivos periféricos de enviar
+información al procesador principal de un sistema de computación. 
+
+
+\item {\it  ¿Se puede hablar de la historia de las interrupciones?}
+
+La primera técnica que se
+empleó fue que el propio procesador se encargara de sondear (polling) los dispositivos cada cierto
+tiempo para averiguar si tenía pendiente alguna comunicación para él. Este método presentaba el 
+inconveniente de ser muy ineficiente, ya que el procesador constantemente consumía tiempo en
+realizar todas las instrucciones de sondeo.
+El mecanismo de interrupciones fue la solución que permitió al procesador desentenderse de esta
+problemática, y delegar en el dispositivo la responsabilidad de comunicarse con el procesador
+cuando lo necesitara. El procesador, en este caso, no sondea a ningún dispositivo, sino que queda
+a la espera de que estos le avisen (le "interrumpan") cuando tengan algo que comunicarle (ya sea
+un evento, una transferencia de información, una condición de error, etc.).
+Entonces vemos que la optimización del sistema de interrupciones está asociado con la evolución de los microprocesadores.
+
+
+\newpage % The \newpage command starts a new blank page. 
+\item {\it ¿Que tipo de interrupciones existen?}
+
+\begin{itemize}
+\item Interrupciones de hardware. Estas son asíncronas a la ejecución del procesador, es decir, sepueden producir en cualquier momento independientemente de lo que esté haciendo el CPU en ese momento. Las causas que lo producen son externas al procesador y a menudo suelenestar ligadas con distintos dispositivos de E/S.
+
+\item Traps. Normalmente son causadas al realizarse operaciones no permitidas tales como la división por 0, el desbordamiento, el acceso a una posición de memoria no permitida, etc.
+
+\item Interrupciones por software. Las interrupciones por software son generadas por el programa enejecución. Para generarla, existen distintas instrucciones en el código máquina que permiten alprogramador producir una interrupción, suelen tener nemotécnicos tales como INT. Suelen ser de vital importancia ya que a partir de estas interrupciones se solicita al sistema operativo realizar determinadas funciones, para ello. Por ejemplo, en DOS se realiza la instrucción INT0x21 y en Unix se utiliza INT 0x80 para hacer llamadas de sistema.
+
+
+\end{itemize}
+
+\item {\it ¿Cómo se hace la implementación de interrupciones a nivel de hardware?}
+Son interrupciones que se producen como resultado de, normalmente, una operación de E/S. No son producidas por ninguna instrucción de un programa sino por señales que producen los dispositivos para indicarle al procesador que necesitan ser atendidos. Las interrupciones de hardware son interesantes en cuanto a que permiten mejorar la productividad del procesador ya que este último puede ordenar una operación de E/S y en lugar de tener que esperar realizando una espera activa, a que el dispositivo termine, es decir, sin hacer ningún trabajo útil, se puede dedicar a atender a otro proceso o aplicaciones y cuando el dispositivo esté de nuevo disponible será el encargado de notificarle al procesador mediante la línea de interrupción que ya está preparado para continuar/terminar la operación de E/S.
+
+\item {\it ¿Cómo se implementan las interrupciones por software?}
+
+
+\begin{enumerate}
+\item Un programa que se venía ejecutando luego de su instrucción I5 , llama al Sistema Operativo, por ejemplo para leer un archivo de disco.(cuando un programa necesita un dato exterior, se detiene y pasa a cumplir con las tareas de recojer ese dato).
+
+\item A tal efecto, luego de I5 existe en el programa, la instrucción de código de máquina CD21, simbolizada INT 21 en Assembler, que realiza el requerimiento del paso a. Puesto que no puede seguir le ejecución de la instrucción I6 y siguientes del programa hasta que no sehaya leído el disco y esté en memoria principal dicho archivo, virtualmente el programa seha interrumpido, siendo, además, que luego de INT 21, las instrucciones que se ejecutarán no serán del programa, sino del Sistema Operativo(se detiene el programa y ordena en este caso mediante INT21 (interrupcion predefinida) que recoge el dato solicitado, para poder sequir el programa que la ordeno).
+
+\newpage
+\item La ejecución de INT 21 permite hallar la subrutina del Sistema Operativo.
+\item Se ejecuta la subrutina del Sistema Operativo que prepara la lectura del disco.
+\item Luego de ejecutarse la subrutina del Sistema Operativo, y una vez que se haya leído el disco y verificado que la lectura es correcta, el Sistema Operativo ordenará reanudar la ejecución del programa autointerrumpido en espera.
+
+
+\end{enumerate}
+\item {\it Ejemplo de interrupción usando la plataforma Arduino.}
+
+\url{https://www.tinkercad.com/things/dJt0EfA8wCe-interrupciones}
+
+
+ 
+
+\end{enumerate}
+\begin{thebibliography}{99}
+
+\bibitem{c1} Interrupciones Y Excepciones. Braihan Andrade.
+
+\bibitem{c2} 
+Interrupciones. Arquitectura de Computadoras. Marzo 2019.
+\bibitem{c3} 
+Modúlo de Microprocesadores Microcontroladores
+. Hector Villamil G. 2009.
+
+\bibitem{c4}Microprocesadores: Historia y evolución estudiante. Elias Hill. 
+
+
+\end{thebibliography}
+
+
+
+
+\end{document}
