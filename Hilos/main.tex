@@ -1,0 +1,184 @@
+
+ 
+\documentclass[a4paper,12pt]{article} 
+
+
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+
+\usepackage{multirow}
+\usepackage{booktabs} 
+
+
+\usepackage{graphicx} 
+
+
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+
+\usepackage{float}
+
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+
+
+
+\pagestyle{fancy} 
+
+\fancyhf{} 
+
+\lhead{\footnotesize  Hilos}% \lhead puts text in the top left corner. \footnotesize sets our font to a smaller size.
+
+%\rhead works just like \lhead (you can also use \chead)
+\rhead{\footnotesize Informática II} %<---- Fill in your lastnames.
+
+
+\cfoot{\footnotesize \thepage} 
+
+
+
+\begin{document}
+
+
+\thispagestyle{empty}  
+
+\begin{tabular}{p{15.5cm}}  
+{\large \bf Proyecto de investigacion - Interrupciones} \\ Imar Nayeli Jimenez Arango \\ 1007424872\\ Informática II   \\ 2019/2, Grupo 6\\
+\hline % \hline produces horizontal lines.
+\\
+\end{tabular} % Our tabular environment ends here.
+
+\vspace*{0.3cm} % Now we want to add some vertical space in between the line and our title.
+
+\begin{center} % Everything within the center environment is centered.
+	{\Large \bf Hilos} % <---- Don't forget to put in the right number
+	\vspace{2mm}
+	
+		
+\end{center}  
+
+\vspace{0.4cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Up until this point you only have to make minor changes for every week (Number of the homework). Your write up essentially starts here.
+
+En el ámbito de los microprocesadores. 
+
+\begin{enumerate}
+
+\item {\it  ¿Qué es una hilo en el contexto de los microprocesadores?}
+
+Un hilo es una unidad básica de utilización de CPU, la cual contiene un id de hilo, su
+propio program counter, un conjunto de registros, y una pila; que se representa a nivel
+del sistema operativo con una estructura llamada TCB (thread control block).
+Los hilos comparten con otros hilos que pertenecen al mismo proceso la sección de
+código, la sección de datos, entre otras cosas. Si un proceso tiene múltiples hilos, puede
+realizar más de una tarea a la vez (esto es real cuando se posee más de un CPU).
+Veamos un ejemplo para clarificar el concepto:
+Un servidor web acepta solicitudes de los clientes que piden páginas web. Si este
+servidor tiene varios clientes y funcionara con un solo hilo de ejecución, solo podría dar
+servicio a un cliente por vez, y el tiempo que podría esperar un cliente para ser atendido
+podría ser muy grande.
+Una posible solución sería que el servidor funcione de tal manera que acepte una
+solicitud por vez, y que cuando reciba otra solicitud, cree otro proceso para dar servicio
+a la nueva solicitud. Pero crear un proceso lleva tiempo y utiliza muchos recursos,
+entonces, si cada proceso realizará las mismas tareas ¿Por qué no utilizar hilos?
+Generalmente es más eficiente usar un proceso que utilice múltiples hilos (un hilo para
+escuchar las solicitudes, y cuando llega una solicitud, el lugar de crear otro proceso, se
+crea otro hilo para procesar la solicitud)
+
+
+\item {\it  ¿Se puede hablar de la historia de los hilos?}
+
+La historia de los hilos la podemos asociar con el avance de los procesadores, pues este pequeño chip alberga en su interior distintos módulos que podemos llamar núcleos, además de otros elementos que ahora no nos interesan. Los procesadores de hace unos años tenían uno solo de estos núcleos, y eran capaces de procesar una instrucción por cada ciclo. Estos ciclos se miden en Megahertzios (MHz), mientras más MHz, mas instrucciones podremos hacer cada segundo.
+
+Ahora no solo tenemos un núcleo, sino varios. Cada núcleo representa un subprocesador, es decir, que cada uno de estos subprocesadores ejecutará una de estas instrucciones, pudiendo así ejecutar varias de ellas en cada ciclo de reloj con una CPU de varios núcleos. Si tenemos un procesador de 4 núcleos, podremos ejecutar 4 instrucciones de forma simultánea en lugar de una sola. Entonces, la mejora de rendimiento se cuadriplica. Si tenemos 6, pues 6 instrucciones al mismo tiempo. De esta forma es como los procesadores actuales son muchísimo más potentes que los antiguos.
+
+
+
+
+\newpage % The \newpage command starts a new blank page. 
+\item {\it ¿Que tipo de hilos existen?}
+
+\begin{itemize}
+\item Hilos a nivel de usuario. Son implementados en alguna librería. Estos hilos se gestionan
+sin soporte del sistema operativo, el cual solo reconoce un hilo de ejecución.
+
+\item Hilos a nivel de kernel. El sistema operativo es quien crea, planifica y gestiona los hilos. Se
+reconocen tantos hilos como se hayan creado.
+
+
+
+
+\end{itemize}
+
+Los hilos a nivel de usuario tienen como beneficio que su cambio de contexto es más
+sencillo que el cambio de contexto entre hilos de kernel. A demás, se pueden
+implementar aún si el SO no utiliza hilos a nivel de kernel. Otro de los beneficios
+consiste en poder planificar diferente a la estrategia del SO.
+Los hilos a nivel de kernel tienen como gran beneficio poder aprovechar mejor las
+arquitecturas multiprocesadores, y que proporcionan un mejor tiempo de respuesta, ya
+que si un hilo se bloquea, los otros pueden seguir ejecutando
+
+\item {\it ¿Cómo se hace la implementación de hilos a nivel de hardware?}
+Cada hilo de procesamiento contiene un trozo de la tarea a realizar, algo más simple de realizar que si introducimos la tarea completa en el núcleo físico. De esta forma la CPU es capaz de procesar varias tareas al mismo tiempo y de forma simultánea, de hecho, podrá hacer tantas tareas como hilos tenga, y normalmente son una o dos por cada núcleo. En los procesadores que tienen por ejemplo 6 núcleos y 12 hilos serán capaces de dividir los procesos en 12 tareas distintas en lugar de solamente 6.
+
+Esta forma de trabajar hace que los recursos del sistema sean administrados de forma más equitativa y eficiente. Ya sabes…el divide y vencerás de toda la vida. Estos procesadores se denominan multi-hilo. Por ahora, lo que debemos tener claro es que un procesador con 12 hilos, no va a tener 12 núcleos, los núcleos son algo de origen físico y los hilos algo de origen lógico.
+
+
+
+Publicado en: https://www.profesionalreview.com/2019/04/03/que-son-los-hilos-de-un-procesador/
+
+
+
+
+
+
+\item {\it  ¿Cómo se implementan los hilos por software? .}
+
+Para ejecutar un programa, este se carga en memoria, la memoria RAM. Este programa es cargado mediante procesos, los cuales llevan su código binario asociado y los recursos que necesita para operar, que serán asignados de forma “inteligente” por el sistema operativo.
+
+Los recursos básicos que necesita un proceso son, un contador de programa, y una pila de registros.
+\begin{itemize}
+\item Contador de programa. Se llama puntero de instrucciones y realiza el seguimiento de la secuencia de instrucciones que se vayan procesando.
+
+
+
+\item Registros. Es un almacén ubicado en el procesador en donde se puede guardar una instrucción, una dirección de almacenamiento o cualquier otro dato.
+
+\item Pila. Es la estructura de datos que almacena la información relativa a las instancias que un programa tiene activas en el ordenador.
+
+
+
+
+\end{itemize}
+Entonces cada programa está dividido en procesos, y está almacenado en un lugar determinado en memoria. Además, cada proceso se ejecuta de forma independiente, y esto es muy importante de entender porque así es como el procesador y el sistema son capaces de ejecutar varias tareas al mismo tiempo, lo que denominamos sistema multitarea. Este sistema de procesamiento es el culpable de que podamos seguir trabajando en nuestro PC, aunque un programa se haya quedado bloqueado.
+
+\end{enumerate}
+
+\begin{thebibliography}{99}
+
+\bibitem{c1}
+\url{https://ed.team/blog/como-funcionan-los-hilos-en-programacion} 
+
+\bibitem{c2} 
+\url{https://www.profesionalreview.com/2019/04/03/que-son-los-hilos-de-un-procesador/}
+\bibitem{c3} 
+\url{https://www.fing.edu.uy/tecnoinf/mvd/cursos/so/material/teo/so05-hilos.pdf}
+
+
+
+\end{thebibliography}
+
+
+
+
+\end{document}
